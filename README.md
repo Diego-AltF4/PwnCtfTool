@@ -30,5 +30,18 @@ pip3 install -r requirements.txt
 ./PwnCtfTool.py
 ```
 
+
+## Acknowledgements
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/dbd4">
+      <img src="https://pbs.twimg.com/profile_images/1380667733449306113/7rJEid1j_400x400.jpg" width="100px;" alt=""/><br/>
+      <sub><b>David Billhardt</b></sub></a><br/>
+    </td>
+  </tr>
+</table>
+
 Created by [DiegoAltF4](https://twitter.com/Diego_AltF4) and [Dbd4](https://twitter.com/DavidBillhardt)
 
