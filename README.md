@@ -28,6 +28,7 @@ Installation:
 git clone https://github.com/Diego-AltF4/PwnCtfTool.git
 cd ./PwnCtfTool
 pip3 install -r requirements.txt
+chmod +x PwnCtfTool.py
 ./PwnCtfTool.py
 ```
 If the tool isn't working due to corefile errors you may solve them by using this command:
