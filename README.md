@@ -26,6 +26,7 @@ optional arguments:
 Installation:
 ```
 git clone https://github.com/Diego-AltF4/PwnCtfTool.git
+cd ./PwnCtfTool
 pip3 install -r requirements.txt
 ./PwnCtfTool.py
 ```
