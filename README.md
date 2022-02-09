@@ -1,3 +1,12 @@
+    ____                 ________  __________            __
+   / __ \_      ______  / ____/ /_/ __/_  __/___  ____  / /
+  / /_/ / | /| / / __ \/ /   / __/ /_  / / / __ \/ __ \/ / 
+ / ____/| |/ |/ / / / / /___/ /_/ __/ / / / /_/ / /_/ / /  
+/_/     |__/|__/_/ /_/\____/\__/_/   /_/  \____/\____/_/   
+                                                           
+                By: DiegoAltF4 and Dbd4
+
+
 ##  Tool for ret2win challenges.  
 It can be used both locally and remotely (indicating IP and port). It automatically finds the offset to the Instruction Pointer stored in the stack. 
 
