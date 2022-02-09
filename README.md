@@ -29,7 +29,13 @@ git clone https://github.com/Diego-AltF4/PwnCtfTool.git
 pip3 install -r requirements.txt
 ./PwnCtfTool.py
 ```
+If the tool isn't working due to corefile errors you may solve them by using this command:
+```
+sudo bash -c 'echo core > /proc/sys/kernel/core_pattern'
+```
+It changes the content of the core_pattern file so that corefiles get always generated with the name "core". This is necessary since the tool accesses the corefile with that name.
 
+**Note:** It is recommended to save a backup of the /proc/sys/kernel/core_pattern file before using the command abovementioned, specially if you have other programs working with corefiles.
 
 ## Acknowledgements
 
