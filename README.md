@@ -37,6 +37,7 @@ It changes the content of the core_pattern file so that corefiles get always gen
 
 **Note:** It is recommended to save a backup of the /proc/sys/kernel/core_pattern file before using the command abovementioned, specially if you have other programs working with corefiles.
 
+
 ## Acknowledgements
 
 <table>
