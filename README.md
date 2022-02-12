@@ -22,16 +22,20 @@ Basic usage:
 
 ```
 Auto PWN tool for CTF
+
 optional arguments:
-  -h, --help show this help message and exit
-  -vv Max Verbose (debug)
-  -v Verbose (info)
-  -g Attach GDB
-  -f FILE File to PWN
-  -t TARGET Target Function
-  --offset Print offset Instruction Pointer
-  --shell Stay interactive
-  --remote Exploit remote server
+  -h, --help       show this help message and exit
+  -vv              Max Verbose (debug)
+  -v               Verbose (info)
+  -g               Attach GDB
+  -f FILE          File to PWN
+  -t TARGET        Target Function
+  --after AFTER    Add file content after payload
+  --before BEFORE  Add file content before payload
+  --offset         Print offset Instruction Pointer
+  --shell          Stay interactive
+  --remote         Exploit remote server
+
 ```
 
 Installation:
