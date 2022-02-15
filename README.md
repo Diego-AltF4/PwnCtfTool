@@ -72,7 +72,7 @@ python3 ../../PwnCtfTool.py -f ./vuln1 -t win --shell --offset
 
 For all the explanation you can read the writeup:
 
-* [**Vuln1**](Example_binaries/Example1/) 💣
+* [**Vuln2**](Example_binaries/Example2/) 💣
 
 **Final command:**
 
