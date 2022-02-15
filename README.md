@@ -54,7 +54,7 @@ For each challenge we have included a small writeup that explains in much more d
 ### Vulnerable binary resolution 1
 
 
-> Using the `-f` `-t` `--shell` parameters 
+> Using the `-f` `-t` `--shell` `--offset` parameters 
 
 For all the explanation you can read the writeup:
 
