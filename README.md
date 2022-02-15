@@ -23,20 +23,18 @@ It also allows to display the offset to the instruction pointer in the stack and
 
 ## Parameters
 
-| Parameter    |  Information |
+| Parameter    | Information |
 |:-------------|:-------------|
-
-|*-f* | indicates the binary to be exploited (**mandatory parameter**).|
-|*-t* | indicates the target function we want to jump to (**mandatory parameter**).|
-|*-v* | indicates verbose info mode.|
-|*-vv* | indicates maximum verbosity value, debug mode.|
-|*-g* | allows attaching GDB for debugging purposes.| 
-|*--offset* | prints the offset to the Instruction Pointer.| 
-|*--shell* | allows an interactive session to be maintained after exploitation.|
-|*--remote* | allows to exploit on a remote server.|
-|*--before* | allows you to add content from a file before the payload.| 
-|*--after* | allows you to add content from a file after the payload.| 
-
+| *-f*          | indicates the binary to be exploited (**mandatory parameter**). |
+| *-t*     | indicates the target function we want to jump to (**mandatory parameter**). |
+| *-v* | indicates verbose info mode. |
+| *-vv*         | indicates maximum verbosity value, debug mode. |
+| *-g* | allows attaching GDB for debugging purposes. |
+| *--offset* | prints the offset to the Instruction Pointer. |
+| *--shell* | allows an interactive session to be maintained after exploitation. |
+| *--remote* | allows to exploit on a remote server. |
+| *--before* | allows you to add content from a file before the payload. |
+| *--after* | allows you to add content from a file after the payload. |
 
 ## Basic usage:
 
