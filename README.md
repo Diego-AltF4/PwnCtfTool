@@ -1,3 +1,5 @@
+#  Tool for ret2win challenges.  
+
 ```
     ____                 ________  __________            __
    / __ \_      ______  / ____/ /_/ __/_  __/___  ____  / /
@@ -9,37 +11,78 @@
 
 ```
 
-##  Tool for ret2win challenges.  
+
+## Introduction
+
 It can be used both locally and remotely (indicating IP and port). It automatically finds the offset to the Instruction Pointer stored in the stack. 
 
-It can be configured to return a shell. By default, it prints the data received by the connection (possible flag). 
-It also allows to display the offset to the instruction pointer in the stack and supports x86 architecture in both 32-bit and 64-bit. 
-It can be used to debug the exploit with GDB. 
+Furthermore, it can be configured to return a shell. By default, it prints the data received by the connection (possible flag). 
 
-Basic usage:
+It also allows to display the offset to the instruction pointer in the stack and supports x86 architecture in both 32-bit and 64-bit and it can be used to debug the exploit with GDB. 
 
-````./PwnCtfTool.py -f vuln.bin -t flag_func````
 
+## Parameters
+
+*-f* indicates the binary to be exploited (**mandatory parameter**).
+*-t* indicates the target function we want to jump to (**mandatory parameter**).
+*-v* indicates verbose info mode.
+*-vv* indicates maximum verbosity value, debug mode.
+*-g* allows attaching GDB for debugging purposes. 
+*--offset* prints the offset to the Instruction Pointer. 
+*--shell* allows an interactive session to be maintained after exploitation.
+*--remote* allows to exploit on a remote server.
+*--before* allows you to add content from a file before the payload. 
+*--after* allows you to add content from a file after the payload. 
+
+
+## Basic usage:
+
+````bash
+./PwnCtfTool.py -f vuln.bin -t flag_func
+````
+
+
+## Advanced use with examples
+
+
+In this part, we will explain the different uses of the tool with examples. We have uploaded a list of vulnerable binaries and we will update this list as we include new options in the tool.
+To make it easier to find the information we will indicate the parameters used in the final command that allows us to exploit the binary. In addition, we are going to classify the difficulty of the challenges using the 💣 emoji. A single bomb means that it is very easy, five bombs indicates that the difficulty is very high. 
+For each challenge we have included a small writeup that explains in much more detail how we can get to the solution. 
+
+
+### Vulnerable binary resolution 1
+
+
+> Using the `-f` `-t` `--shell` parameters 
+
+For all the explanation you can read the writeup:
+
+* [**Vuln1**](Example_binaries/Example1/) 💣
+
+**Final command:**
+
+```bash
+python3 ../../PwnCtfTool.py -f ./vuln1 -t win --shell --offset
 ```
-Auto PWN tool for CTF
 
-optional arguments:
-  -h, --help       show this help message and exit
-  -vv              Max Verbose (debug)
-  -v               Verbose (info)
-  -g               Attach GDB
-  -f FILE          File to PWN
-  -t TARGET        Target Function
-  --after AFTER    Add file content after payload
-  --before BEFORE  Add file content before payload
-  --offset         Print offset Instruction Pointer
-  --shell          Stay interactive
-  --remote         Exploit remote server
 
+### Vulnerable binary resolution 2
+
+> Using `-f` `-t` `--before` `--shell` parameters 
+
+For all the explanation you can read the writeup:
+
+* [**Vuln1**](Example_binaries/Example1/) 💣
+
+**Final command:**
+
+```bash
+python3 ../../PwnCtfTool.py --before before2.txt -f vuln2 -t rce --shell
 ```
 
-Installation:
-```
+## Installation:
+
+```bash
 git clone https://github.com/Diego-AltF4/PwnCtfTool.git
 cd ./PwnCtfTool
 pip3 install -r requirements.txt
