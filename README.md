@@ -98,7 +98,7 @@ chmod +x PwnCtfTool.py
   <tr>
     <td align="center">
       <a href="https://github.com/dbd4">
-      <img src="https://pbs.twimg.com/profile_images/1380667733449306113/7rJEid1j_400x400.jpg" width="100px;" alt=""/><br/>
+      <img src="https://pbs.twimg.com/profile_images/1496180273851125760/Qu1MEp9C_400x400.jpg" width="100px;" alt=""/><br/>
       <sub><b>David Billhardt</b></sub></a><br/>
     </td>
   </tr>
